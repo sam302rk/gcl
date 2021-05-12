@@ -1,7 +1,7 @@
 {
-    "name": "electron-quick-start",
+    "name": "gcl",
     "version": "1.0.0",
-    "description": "A minimal Electron application",
+    "description": "The GamingCraft Launcher",
     "main": "main.js",
     "scripts": {
         "start": "electron ."
@@ -25,6 +25,7 @@
         "discord-rich-presence": "0.0.8",
         "express": "^4.17.1",
         "keytar": "^7.7.0",
+        "mojang-api": "0.0.2",
         "start": "^5.1.0"
     }
 }

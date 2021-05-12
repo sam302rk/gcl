@@ -5,7 +5,13 @@ const debugMode = false;
 const express = require('express')
 const expressApp = express()
 const keytar = require('keytar')
+const MojangAPI = require('mojang-api');
+const fs = require('fs')
 var login;
+
+var data = {
+    user: undefined
+};
 
 expressApp.use(express.urlencoded())
 
@@ -50,13 +56,17 @@ function openMainWindow() {
         icon: __dirname + "/GCL.png",
         autoHideMenuBar: true,
         resizable: true,
-        thickFrame: true
+        thickFrame: true,
+        webPreferences: {
+            nodeIntegration: true,
+            preload: __dirname + "/preload.js"
+        }
     })
 
     window.loadFile('index.html')
     if (debugMode) login.webContents.openDevTools()
 
-    return {};
+    return {}
 }
 
 app.whenReady().then(() => {
@@ -66,13 +76,35 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit() })
 
+expressApp.get('/api/get', (req, res) => {
+    const type = req.query.t
+    switch (type) {
+        case 'user':
+            res.json(data.user)
+            break
+
+        case 'pwd':
+            let x = keytar.findPassword(req.query.q)
+            x.then(y => {
+                res.json(y)
+            })
+            break
+
+        default:
+            res.json({ code: 404 })
+            break
+    }
+});
+
 expressApp.post('/api/login', (req, res) => {
-    // LOGIN INTO MOJANG API LOGIC HERE
-    if (req.body.username === "") return;
-    if (req.body.password === "") return;
-    keytar.setPassword("gcl", req.body.username, req.body.password).then(openMainWindow());
+    if (req.body.username === "" || req.body.password === "") return;
+    MojangAPI.nameToUuid(req.body.username, (err, uuid) => {
+        if (err) return
+        data.user = uuid[0]
+        keytar.setPassword("gcl", uuid[0].id, req.body.password).then(openMainWindow())
+    })
 })
 
 expressApp.listen(53170, () => {
-    console.info("Local Webserver started.");
+    console.info("Local Webserver started.")
 })
