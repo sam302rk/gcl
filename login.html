@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GCL</title>
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <form action="http://127.0.0.1:53170/api/login" method="POST">
+        <h2>Login</h2>
+        <p>Please log into your Minecraft Account.</p>
+        <input type="text" placeholder="Username" name="username" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <br><br>
+        <button class="btn btn-primary ps-5 pe-5">Login</button>
+    </form>
+    <div class="footer">
+        <a href="https://www.gamingcraft.de">Privacy Policies</a> -
+        <a href="https://www.gamingcraft.de">Imprint</a> -
+        <a href="https://www.gamingcraft.de">License</a>
+    </div>
+</body>
+
+</html>

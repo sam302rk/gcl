@@ -1,43 +1,78 @@
-// Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
-const path = require('path')
+const { app, BrowserWindow } = require('electron')
+const client = require('discord-rich-presence')('842019970270887956')
+const loginTime = Date.now()
+const debugMode = false;
+const express = require('express')
+const expressApp = express()
+const keytar = require('keytar')
+var login;
 
-function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+expressApp.use(express.urlencoded())
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+function createWindow() {
+    client.updatePresence({
+        state: 'Logging in',
+        startTimestamp: loginTime,
+        largeImageKey: 'gcl_logo',
+        largeImageText: "GCL Version 1.0",
+        instance: true,
+    });
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+    login = new BrowserWindow({
+        width: 350,
+        height: 450,
+        icon: __dirname + "/GCL.png",
+        autoHideMenuBar: true,
+        resizable: false,
+        thickFrame: true
+    })
+
+    login.loadFile('login.html')
+    if (debugMode) login.webContents.openDevTools()
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+function openMainWindow() {
+    login.hide()
+
+    client.updatePresence({
+        state: 'Browsing instances',
+        startTimestamp: loginTime,
+        largeImageKey: 'gcl_logo',
+        largeImageText: "GCL Version 1.0",
+        smallImageKey: 'grass_block'
+    });
+
+    const window = new BrowserWindow({
+        width: 1280,
+        height: 720,
+        minWidth: 1180,
+        minHeight: 620,
+        icon: __dirname + "/GCL.png",
+        autoHideMenuBar: true,
+        resizable: true,
+        thickFrame: true
+    })
+
+    window.loadFile('index.html')
+    if (debugMode) login.webContents.openDevTools()
+
+    return {};
+}
+
 app.whenReady().then(() => {
-  createWindow()
-  
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
+    createWindow()
+    app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow() })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit() })
+
+expressApp.post('/api/login', (req, res) => {
+    // LOGIN INTO MOJANG API LOGIC HERE
+    if (req.body.username === "") return;
+    if (req.body.password === "") return;
+    keytar.setPassword("gcl", req.body.username, req.body.password).then(openMainWindow());
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+expressApp.listen(53170, () => {
+    console.info("Local Webserver started.");
+})
