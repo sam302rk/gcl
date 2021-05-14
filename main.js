@@ -1,17 +1,17 @@
 const { app, BrowserWindow } = require('electron')
 const client = require('discord-rich-presence')('842019970270887956')
 const loginTime = Date.now()
-const debugMode = false;
+const debugMode = false
 const express = require('express')
 const expressApp = express()
 const keytar = require('keytar')
-const MojangAPI = require('mojang-api');
+const MojangAPI = require('mojang-api')
 const fs = require('fs')
-var login;
+var login
 
 var data = {
     user: undefined
-};
+}
 
 expressApp.use(express.urlencoded())
 
@@ -30,10 +30,12 @@ function createWindow() {
                 width: 350,
                 height: 450,
                 icon: __dirname + "/GCL.png",
-                autoHideMenuBar: true,
                 resizable: false,
                 thickFrame: true
             })
+
+            login.setMenuBarVisibility(false)
+
             login.on('closed', _ => {
                 process.exit(0)
             })
@@ -41,7 +43,7 @@ function createWindow() {
             login.loadFile('login.html')
             if (debugMode) login.webContents.openDevTools()
         } else {
-            openMainWindow();
+            openMainWindow()
         }
     }))
 }
@@ -70,7 +72,6 @@ function openMainWindow() {
         minWidth: 1180,
         minHeight: 620,
         icon: __dirname + "/GCL.png",
-        autoHideMenuBar: true,
         resizable: true,
         thickFrame: true,
         webPreferences: {
@@ -78,6 +79,8 @@ function openMainWindow() {
             preload: __dirname + "/preload.js"
         }
     })
+
+    window.setMenuBarVisibility(false)
 
     window.on('closed', _ => {
         process.exit(0)
@@ -128,6 +131,3 @@ expressApp.post('/api/login', (req, res) => {
 expressApp.listen(53170, () => {
     console.info("Local Webserver started.")
 })
-
-// 14/05/2021: Bin afk lel
-// 14/05/2021: wieder da lel
