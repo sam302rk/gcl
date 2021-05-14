@@ -16,29 +16,45 @@ var data = {
 expressApp.use(express.urlencoded())
 
 function createWindow() {
-    client.updatePresence({
-        state: 'Logging in',
-        startTimestamp: loginTime,
-        largeImageKey: 'gcl_logo',
-        largeImageText: "GCL Version 1.0",
-        instance: true,
-    });
+    keytar.findCredentials("gcl").then((pwds => {
+        if (pwds.length == 0) {
+            client.updatePresence({
+                state: 'Logging in',
+                startTimestamp: loginTime,
+                largeImageKey: 'gcl_logo',
+                largeImageText: "GCL Version 1.0",
+                instance: true,
+            });
 
-    login = new BrowserWindow({
-        width: 350,
-        height: 450,
-        icon: __dirname + "/GCL.png",
-        autoHideMenuBar: true,
-        resizable: false,
-        thickFrame: true
-    })
+            login = new BrowserWindow({
+                width: 350,
+                height: 450,
+                icon: __dirname + "/GCL.png",
+                autoHideMenuBar: true,
+                resizable: false,
+                thickFrame: true
+            })
+            login.on('closed', _ => {
+                process.exit(0)
+            })
 
-    login.loadFile('login.html')
-    if (debugMode) login.webContents.openDevTools()
+            login.loadFile('login.html')
+            if (debugMode) login.webContents.openDevTools()
+        } else {
+            openMainWindow();
+        }
+    }))
 }
 
 function openMainWindow() {
-    login.hide()
+    // Don't judge me, it just works.
+    try { login.hide() } catch (e) {}
+
+    const x = keytar.findCredentials("gcl")
+    x.then(y1 => {
+        console.debug("Accounts:\n" + JSON.stringify(y1))
+        data.user = y1[0].account
+    })
 
     client.updatePresence({
         state: 'Browsing instances',
@@ -61,6 +77,10 @@ function openMainWindow() {
             nodeIntegration: true,
             preload: __dirname + "/preload.js"
         }
+    })
+
+    window.on('closed', _ => {
+        process.exit(0)
     })
 
     window.loadFile('index.html')
@@ -108,3 +128,6 @@ expressApp.post('/api/login', (req, res) => {
 expressApp.listen(53170, () => {
     console.info("Local Webserver started.")
 })
+
+// 14/05/2021: Bin afk lel
+// 14/05/2021: wieder da lel

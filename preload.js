@@ -6,7 +6,7 @@ const getJSON = function(url, callback) {
         if (xhr.status === 200) callback(null, xhr.response)
         else callback(xhr.status, xhr.response)
     };
-    xhr.send();
+    xhr.send()
 };
 
 const setInstalled = function(installed) {
@@ -17,7 +17,7 @@ const setInstalled = function(installed) {
 window.addEventListener('DOMContentLoaded', () => {
     getJSON("http://127.0.0.1:53170/api/get?t=user", (err, data) => {
         if (err) return
-        document.getElementById("name").innerHTML = data.name
+        document.getElementById("name").innerHTML += data
         document.getElementById("id").src = "https://crafatar.com/avatars/" + data.id + "?size=128&default=MHF_Steve&overlay"
     })
     setInstalled(true)
@@ -25,5 +25,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('keyup', (e) => {
-    if (e.key === 'm') setInstalled(document.getElementById("play").hidden);
+    if (e.key === 'm') setInstalled(document.getElementById("play").hidden)
 });

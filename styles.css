@@ -57,8 +57,19 @@ input:hover {
     padding: 2.5em;
     text-align: center;
     background-color: #fff;
-    -webkit-box-shadow: 0px 2px 10px 5px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 2px 10px 5px rgba(0, 0, 0, 0.5);
+}
+
+.top {
+    position: absolute;
+    margin: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1em;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0px -2px 10px 5px rgba(0, 0, 0, 0.5);
 }
 
 .bottombtn {
@@ -73,6 +84,7 @@ input:hover {
     padding-right: 10em;
     padding-left: 10em;
     transition: all 0.5s;
+    box-shadow: 0px 2px 10px 5px rgba(0, 0, 0, 0.25);
 }
 
 .bottombtn:hover {
