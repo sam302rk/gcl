@@ -16,7 +16,7 @@
     "author": "GamingCraft_hd",
     "license": "MIT",
     "devDependencies": {
-        "electron": "^13.1.7"
+        "electron": "^13.1.8"
     },
     "dependencies": {
         "@popperjs/core": "^2.9.2",
