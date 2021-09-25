@@ -19,7 +19,7 @@
         "electron": "^13.1.7"
     },
     "dependencies": {
-        "@popperjs/core": "^2.9.2",
+        "@popperjs/core": "^2.10.1",
         "bootstrap": "^5.0.2",
         "discord-rich-presence": "0.0.8",
         "express": "^4.17.1",
