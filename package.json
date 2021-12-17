@@ -22,7 +22,7 @@
         "@popperjs/core": "^2.10.1",
         "bootstrap": "^5.0.2",
         "discord-rich-presence": "0.0.8",
-        "express": "^4.17.1",
+        "express": "^4.17.2",
         "keytar": "^7.7.0",
         "mojang-api": "0.0.2",
         "start": "^5.1.0"
